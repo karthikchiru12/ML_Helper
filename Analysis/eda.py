@@ -75,39 +75,37 @@ class EDA:
         m = len(variables_that_can_be_visualized)
         if m!=0:
             if m==1:
-                try:
-                    fig = plt.figure()
-                    fig.suptitle(title+"\n",fontsize=24)
-                    plt.title("\nDistribution : "+features[0])
-                    sns.countplot(y = self.data[features[0]],hue=self.data[hue] if hue!=None else None)
-                    return None
-                except:
-                    pass
+                plt.figure(figsize=(width,height))
+                plt.title(title+"\n\n",loc='center',fontsize=24)
+                sns.countplot(y = self.data[features[0]],hue=self.data[hue] if hue!=None else None)
+                return None
             elif m==2:
                 fig, axes = plt.subplots(1, 2,figsize=(width,height),constrained_layout=True)
-                axes[0].title.set_text("\nDistribution : "+features[0])
+                fig.suptitle(title+"\n\n",fontsize=24)
+                axes[0].title.set_text("\nCounts of : "+features[0])
                 sns.countplot(y = self.data[features[0]],hue=self.data[hue] if hue!=None else None,ax=axes[0])
-                axes[1].title.set_text("\nDistribution : "+features[1])
+                axes[1].title.set_text("\nCounts of : "+features[1])
                 sns.countplot(y = self.data[features[1]],hue=self.data[hue] if hue!=None else None,ax=axes[1])
                 return None
             else:
                 rows,cols = self.calculate_rows_and_columns(m)
+                fig, axes = plt.subplots(rows, cols,figsize=(width,height),constrained_layout=True)
+                fig.suptitle(title+"\n\n",fontsize=24)
 
-            fig, axes = plt.subplots(rows, cols,figsize=(width,height),constrained_layout=True)
-            fig.suptitle(title+"\n",fontsize=24)
-
-            # plotting all the features
-            k = 0
-            for i in range(rows):
-                for j in range(cols):
-                    if k > m-1:
-                        axes[i,j].set_axis_off()
-                        break
-                    else:
-                        axes[i,j].title.set_text("\nCount plot : "+features[k])
-                        sns.countplot(y = self.data[features[k]],hue=self.data[hue] if hue!=None else None,ax=axes[i,j])
-                        k += 1
-        else:
+                # plotting all the features
+                k = 0
+                for i in range(rows):
+                    for j in range(cols):
+                        if k > m-1:
+                            axes[i,j].set_axis_off()
+                            break
+                        else:
+                            axes[i,j].title.set_text("\nCounts of : "+features[k])
+                            sns.countplot(y = self.data[features[k]],hue=self.data[hue] if hue!=None else None,ax=axes[i,j])
+                            k += 1
+                return None
+            
+        elif len(variables_that_cannot_be_visualized)!=0:
             print("\n")
             print("\t\t\tValue counts of given features :")
             for i in variables_that_cannot_be_visualized:
@@ -142,17 +140,13 @@ class EDA:
         cols = 0
         m = len(features)
         if m==1:
-            try:
-                fig = plt.figure()
-                fig.suptitle(title+"\n",fontsize=24)
-                fig.legend(handles, labels, loc='upper center')
-                plt.title("\nDistribution : "+features[0])
-                sns.kdeplot(x = self.data[features[0]],hue=self.data[hue] if hue!=None else None)
-                return None
-            except:
-                pass
+            plt.figure(figsize=(width,height))
+            plt.title(title+"\n\n",loc='center',fontsize=24)
+            sns.kdeplot(x = self.data[features[0]],hue=self.data[hue] if hue!=None else None)
+            return None
         elif m==2:
             fig, axes = plt.subplots(1, 2,figsize=(width,height),constrained_layout=True)
+            fig.suptitle(title+"\n\n",fontsize=24)
             axes[0].title.set_text("\nDistribution : "+features[0])
             sns.kdeplot(x = self.data[features[0]],hue=self.data[hue] if hue!=None else None,ax=axes[0])
             axes[1].title.set_text("\nDistribution : "+features[1])
@@ -160,20 +154,19 @@ class EDA:
             return None
         else:
             rows, cols = self.calculate_rows_and_columns(m)
-
-        fig, axes = plt.subplots(rows, cols,figsize=(width,height),constrained_layout=True)
-        fig.suptitle(title+"\n",fontsize=24)
-        # plotting all the features
-        k = 0
-        for i in range(rows):
-            for j in range(cols):
-                if k > m-1:
-                    axes[i,j].set_axis_off()
-                    break
-                else:
-                    axes[i,j].title.set_text("\nDistribution : "+features[k])
-                    sns.kdeplot(x = self.data[features[k]],hue=self.data[hue] if hue!=None else None,ax=axes[i,j])
-                    k += 1
+            fig, axes = plt.subplots(rows, cols,figsize=(width,height),constrained_layout=True)
+            fig.suptitle(title+"\n\n",fontsize=24)
+            # plotting all the features
+            k = 0
+            for i in range(rows):
+                for j in range(cols):
+                    if k > m-1:
+                        axes[i,j].set_axis_off()
+                        break
+                    else:
+                        axes[i,j].title.set_text("\nDistribution : "+features[k])
+                        sns.kdeplot(x = self.data[features[k]],hue=self.data[hue] if hue!=None else None,ax=axes[i,j])
+                        k += 1
         return None
     
     def scatter_plot(self,features, width =16, height=14, hue = None,title = ""):
@@ -202,30 +195,29 @@ class EDA:
         cols = 0
         m = len(features)
         if m==2:
-            plt.title("\nScatter plot : "+str(','.join(features)))
+            plt.figure(figsize=(width,height))
+            plt.title(title+"\n\n",loc='center',fontsize=24)
             sns.scatterplot(data=self.data, x=features[0],y=features[1],hue=self.data[hue] if hue!=None else None)
             return None
         else:
             features_combo = factorial(m)/(factorial(2)*factorial(m-2))
             rows, cols = self.calculate_rows_and_columns(int(features_combo))
-            
-        features_combos = []
-        for i in permutations(features,2):
-            features_combos.append(i)
-            
-        fig, axes = plt.subplots(rows, cols,figsize=(width,height),constrained_layout=True)
-        fig.suptitle(title+"\n",fontsize=24)
-        # plotting all the features
-        k = 0
-        for i in range(rows):
-            for j in range(cols):
-                if k > features_combo-1:
-                    axes[i,j].set_axis_off()
-                    break
-                else:
-                    axes[i,j].title.set_text("\nScatter plot : "+str(','.join(features_combos[k])))
-                    sns.scatterplot(data=self.data, x=features_combos[k][0],y=features_combos[k][1],hue=self.data[hue] if hue!=None else None,ax=axes[i,j])
-                    k += 1
+            features_combos = []
+            for i in permutations(features,2):
+                features_combos.append(i)
+            fig, axes = plt.subplots(rows, cols,figsize=(width,height),constrained_layout=True)
+            fig.suptitle(title+"\n\n",fontsize=24)
+            # plotting all the features
+            k = 0
+            for i in range(rows):
+                for j in range(cols):
+                    if k > features_combo-1:
+                        axes[i,j].set_axis_off()
+                        break
+                    else:
+                        axes[i,j].title.set_text("\nScatter plot : "+str(','.join(features_combos[k])))
+                        sns.scatterplot(data=self.data, x=features_combos[k][0],y=features_combos[k][1],hue=self.data[hue] if hue!=None else None,ax=axes[i,j])
+                        k += 1
         return None
     
     
@@ -252,4 +244,4 @@ class EDA:
         corr = self.data[features].corr()
         plt.figure(figsize=(width,height))
         sns.heatmap(corr,annot=True)
-        plt.title(title+"\n",fontsize=24)
+        plt.title(title+"\n",loc='center',fontsize=24)
