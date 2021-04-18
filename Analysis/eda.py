@@ -205,7 +205,8 @@ class EDA:
             rows, cols = self.calculate_rows_and_columns(int(features_combo))
             features_combos = []
             for i in permutations(features,2):
-                features_combos.append(i)
+            	if i[::-1] not in features_combos:
+                	features_combos.append(i)
             fig, axes = plt.subplots(rows, cols,figsize=(width,height),constrained_layout=True)
             fig.suptitle(title+"\n\n",fontsize=24)
             # plotting all the features
