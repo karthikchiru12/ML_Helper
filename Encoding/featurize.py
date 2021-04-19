@@ -24,8 +24,16 @@ class Featurizer:
         self.x_holdout = x_holdout
         if len(x_holdout) == 0:
             self.holdout_set = False
+            if x_train.shape[0] == x_test.shape[0]:
+                pass
+            else:
+                raise("Please check if given train, test sets have same number of columns")
         else:
             self.holdout_set = True
+            if x_train.shape[0] == x_test.shape[0] == x_holdout.shape[0]:
+                pass
+            else:
+                raise("Please check if given train, test, holdout sets have same number of columns")
             
     
     def vectorizeCategoricalVariables(self,features,returnVectorizerObjects = False):
@@ -119,11 +127,13 @@ class Featurizer:
         
         return stackedSet
     
-    def featurize(self, numerical=[], categorical=[] , returnObjs =False):
+    def featurize(self, returnObjs =False):
         
         """
-        Encodes the given numerical and categorical features and returns the stacked features
+        Encodes the numerical and categorical features and returns the stacked features
         """
+        numerical = self.x_train.select_dtypes(include=np.number).columns.tolist()
+        categorical = self.x_train.select_dtypes(include=np.object).columns.tolist()
         if returnObjs == True:
             vec,tr_vec,ts_vec,hd_vec = self.vectorizeCategoricalVariables(categorical,True)
             norm,tr_norm,ts_norm,hd_norm = self.normalizeNumericalVariables(numerical,True)
