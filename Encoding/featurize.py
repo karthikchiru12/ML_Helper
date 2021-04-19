@@ -88,11 +88,11 @@ class Featurizer:
         x_holdout_result = []
         
         for i in features:
-            normalizer = Normalizer().fit(x_train[i].values.reshape(-1,1))
-            x_train_result.append(normalizer.transform(x_train[i].values.reshape(-1,1)))
-            x_test_result.append(normalizer.transform(x_test[i].values.reshape(-1,1)))
+            normalizer = Normalizer().fit(self.x_train[i].values.reshape(-1,1))
+            x_train_result.append(normalizer.transform(self.x_train[i].values.reshape(-1,1)))
+            x_test_result.append(normalizer.transform(self.x_test[i].values.reshape(-1,1)))
             if self.holdout_set!= False:
-                x_holdout_result.append(normalizer.transform(x_holdout[i].values.reshape(-1,1)))
+                x_holdout_result.append(normalizer.transform(self.x_holdout[i].values.reshape(-1,1)))
                 self.x_holdout = self.x_holdout.drop([i],axis=1)
             normObjs[i] = normalizer
             self.x_train = self.x_train.drop([i],axis=1)
@@ -122,13 +122,13 @@ class Featurizer:
         
         return stackedSet
     
-    def featurize(self, returnObjs =False):
+    def featurize(self, numerical, categorical, returnObjs =False):
         
         """
         Encodes the numerical and categorical features and returns the stacked features
         """
-        numerical = self.x_train.select_dtypes(include=np.number).columns.tolist()
-        categorical = self.x_train.select_dtypes(include=np.object).columns.tolist()
+        #numerical = self.x_train.select_dtypes(include=np.number).columns.tolist()
+        #categorical = self.x_train.select_dtypes(include=np.object).columns.tolist()
         if returnObjs == True:
             vec,tr_vec,ts_vec,hd_vec = self.vectorizeCategoricalVariables(categorical,True)
             norm,tr_norm,ts_norm,hd_norm = self.normalizeNumericalVariables(numerical,True)
