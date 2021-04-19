@@ -24,16 +24,11 @@ class Featurizer:
         self.x_holdout = x_holdout
         if len(x_holdout) == 0:
             self.holdout_set = False
-            if x_train.shape[0] == x_test.shape[0]:
-                pass
-            else:
-                raise("Please check if given train, test sets have same number of columns")
+            assert (x_train.shape[0] == x_test.shape[0]),"Please check if given train, test sets have same number of columns"
+
         else:
             self.holdout_set = True
-            if x_train.shape[0] == x_test.shape[0] == x_holdout.shape[0]:
-                pass
-            else:
-                raise("Please check if given train, test, holdout sets have same number of columns")
+            assert (x_train.shape[0] == x_test.shape[0] == x_holdout.shape[0]),"Please check if given train, test, holdout sets have same number of columns"
             
     
     def vectorizeCategoricalVariables(self,features,returnVectorizerObjects = False):
