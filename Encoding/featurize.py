@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import Normalizer
 from scipy.sparse import csr_matrix
+import scipy
 import os
 import sys
 
@@ -118,7 +119,7 @@ class Featurizer:
             stackedSet.append(i.todense())
         for j in numerical:
             stackedSet.append(j)
-        stackedSet = csr_matrix(np.hstack(tuple(stackedSet)))
+        stackedSet = csr_matrix(scipy.sparse.hstack(tuple(stackedSet)))
         
         return stackedSet
     
