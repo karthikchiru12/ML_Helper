@@ -133,8 +133,9 @@ class EDA:
         ######################
         """
         # https://stackoverflow.com/a/54427278
-        # Asserting if all are numerical features or not
-        assert self.data[features].apply(lambda col: pd.to_numeric(col, errors='coerce').notnull().all()).all(),self.non_numerical_features_error(features)
+        # Asserting if all are numerical features or not (Not needed in latest versions of seaborn)
+        # We can simply use df.select_dtypes(include=np.number).columns.tolist()
+        # assert self.data[features].apply(lambda col: pd.to_numeric(col, errors='coerce').notnull().all()).all(),self.non_numerical_features_error(features)
         
         # Initializing subplot parameters
         rows = 0
