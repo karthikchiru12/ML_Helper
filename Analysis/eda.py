@@ -190,7 +190,7 @@ class EDA:
         """
         # https://stackoverflow.com/a/54427278
         # Asserting if all are numerical features or not
-        assert self.data[features].apply(lambda col: pd.to_numeric(col, errors='coerce').notnull().all()).all(),self.non_numerical_features_error(features)
+        # assert self.data[features].apply(lambda col: pd.to_numeric(col, errors='coerce').notnull().all()).all(),self.non_numerical_features_error(features)
         assert len(features) >= 2 , "At least 2 numerical features must be passed for scatter_plot"
         # Initializing subplot parameters
         rows = 0
