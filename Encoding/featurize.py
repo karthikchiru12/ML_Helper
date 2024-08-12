@@ -119,7 +119,7 @@ class Featurizer:
             stackedSet.append(i.todense())
         for j in numerical:
             stackedSet.append(j)
-        stackedSet = csr_matrix(scipy.sparse.hstack(tuple(stackedSet)))
+        stackedSet = np.hstack(tuple(stackedSet))
         
         return stackedSet
     
